@@ -2,9 +2,15 @@
 # This product includes software developed at Datadog (https://www.datadoghq.com/) Copyright 2025 Datadog, Inc.
 
 variable "datadog_api_key" {
-  type        = string
-  description = "Datadog API key"
-  nullable    = false
+  type        = any
+  description = "Datadog API key as string or secret reference object"
+  validation {
+    condition = (
+      can(tostring(var.datadog_api_key)) ||
+      can(var.datadog_api_key.name)
+    )
+    error_message = "Must be either a string or an object with 'name' and optional 'version'"
+  }
 }
 
 variable "datadog_site" {

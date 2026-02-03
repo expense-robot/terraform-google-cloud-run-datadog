@@ -46,8 +46,23 @@ locals {
 
   # User-check 4: merge env vars for sidecar-instrumentation with user-provided env vars for agent-configuration
   # (ignore any module-controlled env vars that user provides in var.datadog_sidecar.env)
+  # Handle datadog_api_key as either string or secret reference
+  datadog_api_key_env = can(var.datadog_api_key.name) ? {
+    name  = "DD_API_KEY"
+    value = null
+    value_source = {
+      secret_key_ref = {
+        secret  = var.datadog_api_key.name
+        version = try(var.datadog_api_key.version, "latest")
+      }
+    }
+    } : {
+    name         = "DD_API_KEY"
+    value        = var.datadog_api_key
+    value_source = null
+  }
+
   required_module_sidecar_env_vars = {
-    DD_API_KEY     = var.datadog_api_key
     DD_SITE        = var.datadog_site
     DD_SERVICE     = local.datadog_service
     DD_HEALTH_PORT = tostring(var.datadog_sidecar.health_port)
@@ -70,6 +85,7 @@ locals {
     if !contains(local.module_controlled_env_vars, env.name)
   ]
   all_sidecar_env_vars = concat(
+    [local.datadog_api_key_env],
     local.agent_env_vars,
     [for name, value in local.all_module_sidecar_env_vars : { name = name, value = value }]
   )
