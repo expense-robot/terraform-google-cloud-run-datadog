@@ -74,7 +74,7 @@ resource "google_cloud_run_v2_service" "this" {
         name           = try(containers.value.name, null)
         working_dir    = try(containers.value.working_dir, null)
         dynamic "env" {
-          for_each = try(containers.value.env, null) != null ? containers.value.env : []
+          for_each = try(containers.value.env, [])
           content {
             name  = env.value.name
             value = try(env.value.value, null)
@@ -284,5 +284,31 @@ resource "google_cloud_run_v2_service" "this" {
       tag      = try(traffic.value.tag, null)
       type     = try(traffic.value.type, null)
     }
+  }
+
+  # DO NOT REMOVE:
+  # The lifecycle block needs to exist in the resource directly. 
+  # It doesn't accept dynamic values so it's not possible to expose it as a variable to the module.
+  lifecycle {
+    ignore_changes = [
+      annotations["run.googleapis.com/client-name"],
+      annotations["run.googleapis.com/operation-id"],
+      annotations["run.googleapis.com/startup-cpu-boost"],
+      annotations["run.googleapis.com/client-version"],
+      annotations["client.knative.dev/user-image"],
+      labels["client.knative.dev/nonce"],
+      labels["goog-terraform-provisioned"],
+      labels["commit-sha"],
+      labels["managed-by"],
+      template[0].annotations["client.knative.dev/user-image"],
+      template[0].annotations["run.googleapis.com/client-name"],
+      template[0].annotations["run.googleapis.com/client-version"],
+      template[0].annotations["run.googleapis.com/startup-cpu-boost"],
+      template[0].labels["client.knative.dev/nonce"],
+      template[0].labels["goog-terraform-provisioned"],
+      template[0].labels["commit-sha"],
+      template[0].labels["managed-by"],
+      template[0].containers[0].image,
+    ]
   }
 }

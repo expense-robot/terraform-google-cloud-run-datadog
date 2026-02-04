@@ -180,7 +180,7 @@ No modules.
 | <a name="input_client"></a> [client](#input\_client) | Arbitrary identifier for the API client. | `string` | `null` | no |
 | <a name="input_client_version"></a> [client\_version](#input\_client\_version) | Arbitrary version identifier for the API client. | `string` | `null` | no |
 | <a name="input_custom_audiences"></a> [custom\_audiences](#input\_custom\_audiences) | One or more custom audiences that you want this service to support. Specify each custom audience as the full URL in a string. The custom audiences are encoded in the token and used to authenticate requests.<br/>For more information, see https://cloud.google.com/run/docs/configuring/custom-audiences. | `list(string)` | `null` | no |
-| <a name="input_datadog_api_key"></a> [datadog\_api\_key](#input\_datadog\_api\_key) | Datadog API key | `string` | n/a | yes |
+| <a name="input_datadog_api_key"></a> [datadog\_api\_key](#input\_datadog\_api\_key) | Datadog API key as string or secret reference object | `any` | n/a | yes |
 | <a name="input_datadog_enable_logging"></a> [datadog\_enable\_logging](#input\_datadog\_enable\_logging) | Enables log collection. Defaults to true. | `bool` | `true` | no |
 | <a name="input_datadog_env"></a> [datadog\_env](#input\_datadog\_env) | Datadog Environment tag, used for Unified Service Tagging. | `string` | `null` | no |
 | <a name="input_datadog_log_level"></a> [datadog\_log\_level](#input\_datadog\_log\_level) | Datadog agent's level of log output in Cloud Run UI, from most to least output: TRACE, DEBUG, INFO, WARN, ERROR, CRITICAL | `string` | `null` | no |

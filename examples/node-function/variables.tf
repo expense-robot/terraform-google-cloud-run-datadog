@@ -34,7 +34,13 @@ variable "image" {
 //datadog values
 
 variable "datadog_api_key" {
-  type        = string
-  description = "The api key for datadog"
-  nullable    = false
+  type        = any
+  description = "Datadog API key as string or secret reference object"
+  validation {
+    condition = (
+      can(tostring(var.datadog_api_key)) ||
+      can(var.datadog_api_key.name)
+    )
+    error_message = "Must be either a string or an object with 'name' and optional 'version'"
+  }
 }
