@@ -309,6 +309,7 @@ resource "google_cloud_run_v2_service" "this" {
       template[0].labels["commit-sha"],
       template[0].labels["managed-by"],
       template[0].containers[0].image,
+      template[0].containers[1].image
     ]
   }
 }
