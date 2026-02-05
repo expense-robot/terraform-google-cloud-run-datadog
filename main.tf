@@ -157,7 +157,7 @@ locals {
             local.shared_env_vars,
             { DD_LOGS_INJECTION = "true" },
             # user provided env vars (without value_source) converted to map
-            { for env in coalesce(container.env, []) : env.name => env.value if try(env.value_source, null) == null },
+            { for env in coalesce(container.env, []) : env.name => env.value if env.value_source == null },
             # always override user configuration with these env vars
             { DD_SERVERLESS_LOG_PATH = var.datadog_logging_path }
           ) : { name = name, value = value, value_source = null }]
