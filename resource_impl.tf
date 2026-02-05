@@ -291,6 +291,8 @@ resource "google_cloud_run_v2_service" "this" {
   # It doesn't accept dynamic values so it's not possible to expose it as a variable to the module.
   lifecycle {
     ignore_changes = [
+      client,
+      client_version,
       annotations["run.googleapis.com/client-name"],
       annotations["run.googleapis.com/operation-id"],
       annotations["run.googleapis.com/startup-cpu-boost"],
@@ -308,6 +310,9 @@ resource "google_cloud_run_v2_service" "this" {
       template[0].labels["goog-terraform-provisioned"],
       template[0].labels["commit-sha"],
       template[0].labels["managed-by"],
+      template[0].labels["dd_sls_terraform_module"],
+      template[0].labels["env"],
+      template[0].labels["service"],
       template[0].containers[0].image,
       template[0].containers[1].image
     ]
