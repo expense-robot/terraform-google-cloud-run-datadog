@@ -95,11 +95,6 @@ locals {
       env           = local.all_sidecar_env_vars
       volume_mounts = var.datadog_enable_logging ? [var.datadog_shared_volume] : []
       startup_probe = merge(var.datadog_sidecar.startup_probe, { tcp_socket = { port = var.datadog_sidecar.health_port } })
-      # make sure the sidecar is removing ports
-      ports = {
-        container_port = null,
-        name           = null
-      }
     },
   )
 }
