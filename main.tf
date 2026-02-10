@@ -144,7 +144,7 @@ locals {
   )
 
   # Update the environments on the containers
-  template_containers = concat([local.sidecar_container],
+  template_containers = concat(
     [for container in local.containers_without_sidecar :
       merge(container, {
         env = concat(
@@ -167,7 +167,8 @@ locals {
           var.datadog_enable_logging ? [var.datadog_shared_volume] : [],
           [for vm in coalesce(container.volume_mounts, []) : vm if contains(local.filtered_volume_mounts, vm)],
         )
-    })]
+    })],
+    [local.sidecar_container] # add sidecar container at the end. otherwise, it deletes the service container
   )
 
   # If dd_enable_logging is true, add the shared volume to the template volumes
